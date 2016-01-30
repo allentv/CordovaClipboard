@@ -38,12 +38,25 @@ public class Clipboard extends CordovaPlugin {
             }
         } else if (action.equals(actionPaste)) {
             try {
+                ClipDescription itemClipDescription = clipboard.getPrimaryClipDescription();
+                if (!(
+                    itemClipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) ||
+                    itemClipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)
+                )) {
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.NO_RESULT));
+                }
                 ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                // Coerce into text to support HTML text
-                String text = item.coerceToText().toString();
-                if (text == null) text = "";
+                String textData = null;
+                if(itemClipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    textData = item.getText().toString();
+                } else {
+                    Context cordovaContext = this.cordova.getActivity().getApplicationContext();
+                    // Coerce into text to support HTML text
+                    textData = item.coerceToText(cordovaContext).toString();
+                }
+                if (textData == null) textData = "";
 
-                callbackContext.success(text);
+                callbackContext.success(textData);
 
                 return true;
             } catch (Exception e) {
