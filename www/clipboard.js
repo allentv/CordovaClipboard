@@ -29,6 +29,12 @@ Clipboard.prototype.paste = function (onSuccess, onFail) {
 	cordova.exec(onSuccess, onFail, "Clipboard", "paste", []);
 };
 
+// Gets the clipboard image content as base64
+Clipboard.prototype.pasteImage = function (onSuccess, onFail) {
+	cordova.exec(onSuccess, onFail, "Clipboard", "pasteImage", []);
+};
+
+
 // Register the plugin
 var clipboard = new Clipboard();
 module.exports = clipboard;
