@@ -19,6 +19,10 @@ Example:
 
 	cordova.plugins.clipboard.paste(function (text) { alert(text); });
 
+	cordova.plugins.clipboard.pasteImage(function (base64jpg){
+        	$("#testPasteWrapper").append("<img src='data:image/jpeg;base64," + base64jpg + "'>")
+	});
+
 ## Notes
 
 ### All platforms
